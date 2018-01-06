@@ -13,10 +13,15 @@
     }
   </style>
   <script id="shader-vs" type="x-shader/x-vertex">
-    attribute vec3 aVertexPosition; void main(void) { gl_Position = vec4(aVertexPosition, 1.0); }
+    attribute vec3 aVertexPosition; 
+    void main(void) { 
+      gl_Position = vec4(aVertexPosition, 1.0); 
+    }
   </script>
   <script id="shader-fs" type="x-shader/x-fragment">
-    void main(void) { gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0); }
+    void main(void) { 
+      gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0); 
+    }
   </script>
   <script>
     var gl = null,
@@ -53,13 +58,16 @@
 
     function initShaders() {
       //get shader source
-      var fs_source = document.getElementById('shader-fs').html(),
-          vs_source = document.getElementById('shader-vs').html();
+      var fs_source = document.getElementById('shader-fs').innerHTML,
+          vs_source = document.getElementById('shader-vs').innerHTML;
+          
       //compile shaders
       vertexShader = makeShader(vs_source, gl.VERTEX_SHADER);
       fragmentShader = makeShader(fs_source, gl.FRAGMENT_SHADER);
+
       //create program
       glProgram = gl.createProgram();
+
       //attach and link shaders to the program
       gl.attachShader(glProgram, vertexShader);
       gl.attachShader(glProgram, fragmentShader);
@@ -67,6 +75,7 @@
       if (!gl.getProgramParameter(glProgram, gl.LINK_STATUS)) {
         alert("Unable to initialize the shader program.");
       }
+      
       //use program
       gl.useProgram(glProgram);
     }
@@ -82,9 +91,34 @@
       return shader;
     }
 
-    function setupBuffers() {}
+    function setupBuffers() {
+      var triangleVertices = [
+            //left triangle
+            -0.5, 0.5, 0.0,
+            0.0, 0.0, 0.0,
+            -0.5, -0.5, 0.0,
+            //right triangle
+            0.5, 0.5, 0.0,
+            0.0, 0.0, 0.0,
+            0.5, -0.5, 0.0
+          ];
+      trianglesVerticeBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, trianglesVerticeBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVertices), gl.STATIC_DRAW);
+    }
 
-    function drawScene() {}
+    function drawScene() {
+      vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
+      gl.enableVertexAttribArray(vertexPositionAttribute);
+      gl.bindBuffer(gl.ARRAY_BUFFER, trianglesVerticeBuffer);
+      gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+      // gl.drawArrays(gl.TRIANGLES, 0, 6);
+      // gl.drawArrays(gl.LINES, 0, 6);
+      // gl.drawArrays(gl.LINES, 0, 2);
+      // gl.drawArrays(gl.LINES, 2, 2);
+      // gl.drawArrays(gl.LINES, 4, 2);
+      gl.drawArrays(gl.POINTS, 0, 6);
+    }
   </script>
 </head>
 
