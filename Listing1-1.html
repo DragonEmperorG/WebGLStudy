@@ -16,6 +16,7 @@
     attribute vec3 aVertexPosition; 
     void main(void) { 
       gl_Position = vec4(aVertexPosition, 1.0); 
+      gl_PointSize = 5.0;
     }
   </script>
   <script id="shader-fs" type="x-shader/x-fragment">
@@ -75,7 +76,7 @@
       if (!gl.getProgramParameter(glProgram, gl.LINK_STATUS)) {
         alert("Unable to initialize the shader program.");
       }
-      
+
       //use program
       gl.useProgram(glProgram);
     }
@@ -112,12 +113,12 @@
       gl.enableVertexAttribArray(vertexPositionAttribute);
       gl.bindBuffer(gl.ARRAY_BUFFER, trianglesVerticeBuffer);
       gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-      // gl.drawArrays(gl.TRIANGLES, 0, 6);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
       // gl.drawArrays(gl.LINES, 0, 6);
       // gl.drawArrays(gl.LINES, 0, 2);
       // gl.drawArrays(gl.LINES, 2, 2);
       // gl.drawArrays(gl.LINES, 4, 2);
-      gl.drawArrays(gl.POINTS, 0, 6);
+      // gl.drawArrays(gl.POINTS, 0, 6);
     }
   </script>
 </head>
